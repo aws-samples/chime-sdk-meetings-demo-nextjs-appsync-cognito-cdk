@@ -1,0 +1,36 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type ChimeMeeting @aws_cognito_user_pools {
+  meetingResponse: String!
+  attendeeResponse: String!
+}
+
+type MeetingInvitation @aws_cognito_user_pools {
+  target: ID!
+  source: ID!
+  meetingResponse: String!
+}
+
+type Query {
+  dummy: ChimeMeeting
+}
+
+type Mutation {
+  createChimeMeeting: ChimeMeeting @aws_cognito_user_pools
+  createMeetingInvitation(
+    target: ID!
+    source: ID!
+    meetingResponse: String!
+  ): MeetingInvitation @aws_cognito_user_pools
+  joinMeeting(meetingResponse: String!): ChimeMeeting @aws_cognito_user_pools
+}
+
+type Subscription {
+  onMeetingInvited(target: ID!): MeetingInvitation
+    @aws_subscribe(mutations: ["createMeetingInvitation"])
+    @aws_cognito_user_pools
+}

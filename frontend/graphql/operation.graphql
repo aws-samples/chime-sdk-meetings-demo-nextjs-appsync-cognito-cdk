@@ -1,0 +1,21 @@
+mutation CreateMeeting {
+  createChimeMeeting {
+    meetingResponse
+    attendeeResponse
+  }
+}
+
+mutation JoinMeeting($meetingResponse: String!) {
+  joinMeeting(meetingResponse: $meetingResponse) {
+    meetingResponse
+    attendeeResponse
+  }
+}
+
+mutation CreateMeetingInvitation($target: ID!, $source: ID!, $meetingResponse: String!) {
+  createMeetingInvitation(target: $target, source: $source, meetingResponse: $meetingResponse) {
+    source
+    target
+    meetingResponse
+  }
+}

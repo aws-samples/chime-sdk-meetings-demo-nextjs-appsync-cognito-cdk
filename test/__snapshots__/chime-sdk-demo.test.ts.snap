@@ -1,0 +1,1404 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test 1`] = `
+Object {
+  "Outputs": Object {
+    "AuthUserPoolClientId8216BF9A": Object {
+      "Value": Object {
+        "Ref": "AuthUserPoolClientC635291F",
+      },
+    },
+    "AuthUserPoolIdC0605E59": Object {
+      "Value": Object {
+        "Ref": "AuthUserPool8115E87F",
+      },
+    },
+    "BackendApiBackendApiUrl4A0A7879": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "BackendApiC9FA6A88",
+          "GraphQLUrl",
+        ],
+      },
+    },
+    "FrontendDomainName": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Fn::GetAtt": Array [
+                "FrontendDistributionCFDistributionAE9BA647",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "AccessLogBucketAutoDeleteObjectsCustomResource01AB31E8": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "AccessLogBucketPolicyF52D2D01",
+      ],
+      "Properties": Object {
+        "BucketName": Object {
+          "Ref": "AccessLogBucketDA470295",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "AccessLogBucketDA470295": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "AccessLogBucketPolicyF52D2D01": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "AccessLogBucketDA470295",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "AccessLogBucketDA470295",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AccessLogBucketDA470295",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "AccessLogBucketDA470295",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AccessLogBucketDA470295",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "AuthUserPool8115E87F": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AccountRecoverySetting": Object {
+          "RecoveryMechanisms": Array [
+            Object {
+              "Name": "verified_phone_number",
+              "Priority": 1,
+            },
+            Object {
+              "Name": "verified_email",
+              "Priority": 2,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": Object {
+          "AllowAdminCreateUserOnly": false,
+        },
+        "AutoVerifiedAttributes": Array [
+          "email",
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Policies": Object {
+          "PasswordPolicy": Object {
+            "MinimumLength": 8,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UsernameAttributes": Array [
+          "email",
+        ],
+        "VerificationMessageTemplate": Object {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "AuthUserPoolClientC635291F": Object {
+      "Properties": Object {
+        "AllowedOAuthFlows": Array [
+          "implicit",
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": Array [
+          "profile",
+          "phone",
+          "email",
+          "openid",
+          "aws.cognito.signin.user.admin",
+        ],
+        "CallbackURLs": Array [
+          "https://example.com",
+        ],
+        "IdTokenValidity": 1440,
+        "SupportedIdentityProviders": Array [
+          "COGNITO",
+        ],
+        "TokenValidityUnits": Object {
+          "IdToken": "minutes",
+        },
+        "UserPoolId": Object {
+          "Ref": "AuthUserPool8115E87F",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "BackendApiApiLogsRoleEB9B6309": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "appsync.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BackendApiC9FA6A88": Object {
+      "Properties": Object {
+        "AuthenticationType": "AMAZON_COGNITO_USER_POOLS",
+        "LogConfig": Object {
+          "CloudWatchLogsRoleArn": Object {
+            "Fn::GetAtt": Array [
+              "BackendApiApiLogsRoleEB9B6309",
+              "Arn",
+            ],
+          },
+          "FieldLogLevel": "ALL",
+        },
+        "Name": "Api",
+        "UserPoolConfig": Object {
+          "AwsRegion": Object {
+            "Ref": "AWS::Region",
+          },
+          "DefaultAction": "ALLOW",
+          "UserPoolId": Object {
+            "Ref": "AuthUserPool8115E87F",
+          },
+        },
+      },
+      "Type": "AWS::AppSync::GraphQLApi",
+    },
+    "BackendApiChimeResolverFunctionF715C39D": Object {
+      "DependsOn": Array [
+        "BackendApiChimeResolverFunctionServiceRoleDefaultPolicy27CD3C5E",
+        "BackendApiChimeResolverFunctionServiceRole1EDDA251",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "c6b8e42eecd8e7a3e3f20e7689c1869e6d2c93efea423f153ef36c2873aadbd8.zip",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiChimeResolverFunctionServiceRole1EDDA251",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BackendApiChimeResolverFunctionServiceRole1EDDA251": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BackendApiChimeResolverFunctionServiceRoleDefaultPolicy27CD3C5E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "chime:createAttendee",
+                "chime:createMeeting",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BackendApiChimeResolverFunctionServiceRoleDefaultPolicy27CD3C5E",
+        "Roles": Array [
+          Object {
+            "Ref": "BackendApiChimeResolverFunctionServiceRole1EDDA251",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BackendApiCreateChimeMeeting4EE28BC4": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "LambdaConfig": Object {
+          "LambdaFunctionArn": Object {
+            "Fn::GetAtt": Array [
+              "BackendApiChimeResolverFunctionF715C39D",
+              "Arn",
+            ],
+          },
+        },
+        "Name": "CreateChimeMeeting",
+        "ServiceRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiCreateChimeMeetingServiceRoleBA60D71E",
+            "Arn",
+          ],
+        },
+        "Type": "AWS_LAMBDA",
+      },
+      "Type": "AWS::AppSync::DataSource",
+    },
+    "BackendApiCreateChimeMeetingMutationcreateChimeMeetingResolverBFFA02C2": Object {
+      "DependsOn": Array [
+        "BackendApiCreateChimeMeeting4EE28BC4",
+        "BackendApiSchema3E54B1EF",
+      ],
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": "CreateChimeMeeting",
+        "FieldName": "createChimeMeeting",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\\"version\\": \\"2017-02-28\\", \\"operation\\": \\"Invoke\\", \\"payload\\": $util.toJson($ctx)}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "BackendApiCreateChimeMeetingMutationjoinMeetingResolver1D508E54": Object {
+      "DependsOn": Array [
+        "BackendApiCreateChimeMeeting4EE28BC4",
+        "BackendApiSchema3E54B1EF",
+      ],
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": "CreateChimeMeeting",
+        "FieldName": "joinMeeting",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\\"version\\": \\"2017-02-28\\", \\"operation\\": \\"Invoke\\", \\"payload\\": $util.toJson($ctx)}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "BackendApiCreateChimeMeetingServiceRoleBA60D71E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "appsync.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BackendApiCreateChimeMeetingServiceRoleDefaultPolicy395E7299": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BackendApiChimeResolverFunctionF715C39D",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BackendApiChimeResolverFunctionF715C39D",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BackendApiCreateChimeMeetingServiceRoleDefaultPolicy395E7299",
+        "Roles": Array [
+          Object {
+            "Ref": "BackendApiCreateChimeMeetingServiceRoleBA60D71E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BackendApiDummyDataSource541C491E": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "Name": "DummyDataSource",
+        "Type": "NONE",
+      },
+      "Type": "AWS::AppSync::DataSource",
+    },
+    "BackendApiDummyDataSourceMutationcreateMeetingInvitationResolver78ADB77C": Object {
+      "DependsOn": Array [
+        "BackendApiSchema3E54B1EF",
+        "BackendApiDummyDataSource541C491E",
+      ],
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": "DummyDataSource",
+        "FieldName": "createMeetingInvitation",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #if ($context.identity.sub != $context.arguments.source)
+          $util.unauthorized()
+        #end
+        {
+          \\"version\\": \\"2018-05-29\\",
+          \\"payload\\": $util.toJson($context.arguments)
+        }
+      ",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "BackendApiDummyDataSourceSubscriptiononMeetingInvitedResolver4F90F789": Object {
+      "DependsOn": Array [
+        "BackendApiSchema3E54B1EF",
+        "BackendApiDummyDataSource541C491E",
+      ],
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": "DummyDataSource",
+        "FieldName": "onMeetingInvited",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #if ($context.identity.sub != $context.arguments.target)
+          $util.unauthorized()
+        #end
+        {
+          \\"version\\": \\"2018-05-29\\",
+          \\"payload\\": {}
+        }
+      ",
+        "ResponseMappingTemplate": "$util.toJson(null)",
+        "TypeName": "Subscription",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "BackendApiSchema3E54B1EF": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "BackendApiC9FA6A88",
+            "ApiId",
+          ],
+        },
+        "Definition": "schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type ChimeMeeting @aws_cognito_user_pools {
+  meetingResponse: String!
+  attendeeResponse: String!
+}
+
+type MeetingInvitation @aws_cognito_user_pools {
+  target: ID!
+  source: ID!
+  meetingResponse: String!
+}
+
+type Query {
+  dummy: ChimeMeeting
+}
+
+type Mutation {
+  createChimeMeeting: ChimeMeeting @aws_cognito_user_pools
+  createMeetingInvitation(
+    target: ID!
+    source: ID!
+    meetingResponse: String!
+  ): MeetingInvitation @aws_cognito_user_pools
+  joinMeeting(meetingResponse: String!): ChimeMeeting @aws_cognito_user_pools
+}
+
+type Subscription {
+  onMeetingInvited(target: ID!): MeetingInvitation
+    @aws_subscribe(mutations: [\\"createMeetingInvitation\\"])
+    @aws_cognito_user_pools
+}
+",
+      },
+      "Type": "AWS::AppSync::GraphQLSchema",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": Object {
+      "DependsOn": Array [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da.zip",
+        },
+        "Handler": "index.handler",
+        "Layers": Array [
+          Object {
+            "Ref": "FrontendReactBuildDeployAwsCliLayer6AE670F6",
+          },
+        ],
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.7",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "FrontendAssetBucket3FA96E62",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "FrontendAssetBucket3FA96E62",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "cloudfront:GetInvalidation",
+                "cloudfront:CreateInvalidation",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "Roles": Array [
+          Object {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
+      "DependsOn": Array [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "ac9d3642b3e0626d3a6d8c4f5f56507a478c329febdf1dcfbbf7c7db9812cd30.zip",
+        },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Lambda function for auto-deleting objects in ",
+              Object {
+                "Ref": "AccessLogBucketDA470295",
+              },
+              " S3 bucket.",
+            ],
+          ],
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "FrontendAssetBucket3FA96E62": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+          Object {
+            "Key": "aws-cdk:cr-owned:e1ed62f7",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "FrontendAssetBucketAutoDeleteObjectsCustomResource8D0834F0": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "FrontendAssetBucketPolicyE9D0C32D",
+      ],
+      "Properties": Object {
+        "BucketName": Object {
+          "Ref": "FrontendAssetBucket3FA96E62",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "FrontendAssetBucketPolicyE9D0C32D": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "FrontendAssetBucket3FA96E62",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "FrontendAssetBucket3FA96E62",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "FrontendAssetBucket3FA96E62",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "FrontendAssetBucket3FA96E62",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "FrontendAssetBucket3FA96E62",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "FrontendOriginAccessIdentity15749265",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "FrontendAssetBucket3FA96E62",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "FrontendDistributionCFDistributionAE9BA647": Object {
+      "Properties": Object {
+        "DistributionConfig": Object {
+          "CustomErrorResponses": Array [
+            Object {
+              "ErrorCachingMinTTL": 0,
+              "ErrorCode": 404,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/",
+            },
+            Object {
+              "ErrorCachingMinTTL": 0,
+              "ErrorCode": 403,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/",
+            },
+          ],
+          "DefaultCacheBehavior": Object {
+            "AllowedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "CachedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "ForwardedValues": Object {
+              "Cookies": Object {
+                "Forward": "none",
+              },
+              "QueryString": false,
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Logging": Object {
+            "Bucket": Object {
+              "Fn::GetAtt": Array [
+                "AccessLogBucketDA470295",
+                "RegionalDomainName",
+              ],
+            },
+            "IncludeCookies": false,
+            "Prefix": "Frontend/",
+          },
+          "Origins": Array [
+            Object {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "DomainName": Object {
+                "Fn::GetAtt": Array [
+                  "FrontendAssetBucket3FA96E62",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "origin1",
+              "S3OriginConfig": Object {
+                "OriginAccessIdentity": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "origin-access-identity/cloudfront/",
+                      Object {
+                        "Ref": "FrontendOriginAccessIdentity15749265",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": Object {
+            "CloudFrontDefaultCertificate": true,
+          },
+        },
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "FrontendOriginAccessIdentity15749265": Object {
+      "Properties": Object {
+        "CloudFrontOriginAccessIdentityConfig": Object {
+          "Comment": "Allows CloudFront to reach the bucket",
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "FrontendReactBuildDeployAwsCliLayer6AE670F6": Object {
+      "DependsOn": Array [
+        "FrontendReactBuildE02FF220",
+      ],
+      "Properties": Object {
+        "Content": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "823f6b284b7398541ad875711f17011724c206ee7fbbd046c66f171875c66c66.zip",
+        },
+        "Description": "/opt/awscli/aws",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "FrontendReactBuildDeployCustomResourceA2CE2F1C": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "FrontendReactBuildE02FF220",
+      ],
+      "Properties": Object {
+        "DestinationBucketName": Object {
+          "Ref": "FrontendAssetBucket3FA96E62",
+        },
+        "DistributionId": Object {
+          "Ref": "FrontendDistributionCFDistributionAE9BA647",
+        },
+        "Prune": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+            "Arn",
+          ],
+        },
+        "SourceBucketNames": Array [
+          Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        ],
+        "SourceObjectKeys": Array [
+          "d167a0c18025cf284116ee0cc5a0f4ca.zip",
+        ],
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "FrontendReactBuildE02FF220": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c446591C4101F8",
+            "Arn",
+          ],
+        },
+        "buildCommands": Array [
+          "npm run build",
+        ],
+        "destinationBucketName": Object {
+          "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+        },
+        "destinationObjectKey": "d167a0c18025cf284116ee0cc5a0f4ca.zip",
+        "environment": Object {
+          "NEXT_PUBLIC_AWS_REGION": Object {
+            "Ref": "AWS::Region",
+          },
+          "NEXT_PUBLIC_BACKEND_API_URL": Object {
+            "Fn::GetAtt": Array [
+              "BackendApiC9FA6A88",
+              "GraphQLUrl",
+            ],
+          },
+          "NEXT_PUBLIC_USER_POOL_CLIENT_ID": Object {
+            "Ref": "AuthUserPoolClientC635291F",
+          },
+          "NEXT_PUBLIC_USER_POOL_ID": Object {
+            "Ref": "AuthUserPool8115E87F",
+          },
+        },
+        "outputSourceDirectory": "frontend/out",
+        "sources": Array [
+          Object {
+            "commands": Array [
+              "npm ci",
+            ],
+            "directoryName": "frontend",
+            "sourceBucketName": Object {
+              "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+            },
+            "sourceObjectKey": "b0d2b432bb1ff448fa5872f72dbfb5979d658fe68ad95c1afd3bdd2304a37653.zip",
+          },
+        ],
+        "workingDirectory": "frontend",
+      },
+      "Type": "Custom::CDKNodejsBuild",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c446591C4101F8": Object {
+      "DependsOn": Array [
+        "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleDefaultPolicyCF8879D3",
+        "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleCB01FBE6",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "2a9e0a6f733aa56352e639d93c3f8d58758ae878c8ea66994cc088ea23dd4a91.zip",
+        },
+        "EphemeralStorage": Object {
+          "Size": 5120,
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1792,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleCB01FBE6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 600,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleCB01FBE6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleDefaultPolicyCF8879D3": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleDefaultPolicyCF8879D3",
+        "Roles": Array [
+          Object {
+            "Ref": "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleCB01FBE6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

@@ -18,12 +18,12 @@ This sample includes:
 We use AppSync, a managed GraphQL service for backend API, enabling a realtime notification when a user is called, and other serverless services to reduce heavy lifting of managing servers.
 
 ### How to use
-When you open this web app, you need first to sign up a Cognito user. After sign in to the user, a page like the below image will be shown.
+When you open this web app, you need first to sign up a Cognito user. After signing in to the user, a page like the below image will be shown.
 
 ![gui](imgs/gui.png)
 
-The top text box shows your Cognito user ID, which is used as a kind of a "phone number" in this sample. When you call to a user, you must specify a target's user ID in the next text field. 
-When you input the target user ID and click the `CALL` button, a meeting is created and the target user is notified. 
+The top text box `MyID` shows your Cognito user ID, which is used like a "phone number" in this case. When you want to make a call to a user, you must specify a target's user ID in the next text field `Target ID`. 
+When you input the target user ID and click the `CALL` button, a meeting is created and the target user is notified via AppSync subscription. Note that the receiver must open the page before a call is made to receive a notfication; otherwise the call is discarded.
 
 If the target user clicked the `RECEIVE A CALL` button, they will also join the meeting and can start a one-on-one call.
 

@@ -1,7 +1,7 @@
 import { Construct } from 'constructs';
 import { CfnOutput, Duration } from 'aws-cdk-lib';
 import { Auth } from './auth';
-import * as appsync from '@aws-cdk/aws-appsync-alpha';
+import * as appsync from 'aws-cdk-lib/aws-appsync';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
@@ -30,7 +30,7 @@ export class BackendApi extends Construct {
 
     const api = new appsync.GraphqlApi(this, 'Api', {
       name: 'Api',
-      schema: appsync.Schema.fromAsset('backend/schema.graphql'),
+      schema: appsync.SchemaFile.fromAsset('backend/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.USER_POOL,
@@ -44,16 +44,16 @@ export class BackendApi extends Construct {
       },
     });
 
-    const chimeDataSource = api.addLambdaDataSource('CreateChimeMeeting', chimeResolverFunction);
+    const chimeDataSource = api.addLambdaDataSource('ChimeDataSource', chimeResolverFunction);
 
-    chimeDataSource.createResolver({
+    chimeDataSource.createResolver('CreateChimeMeeting', {
       typeName: 'Mutation',
       fieldName: 'createChimeMeeting',
       requestMappingTemplate: appsync.MappingTemplate.lambdaRequest(),
       responseMappingTemplate: appsync.MappingTemplate.lambdaResult(),
     });
 
-    chimeDataSource.createResolver({
+    chimeDataSource.createResolver('JoinMeeting', {
       typeName: 'Mutation',
       fieldName: 'joinMeeting',
       requestMappingTemplate: appsync.MappingTemplate.lambdaRequest(),
@@ -64,7 +64,7 @@ export class BackendApi extends Construct {
       api,
     });
 
-    dummyDataSource.createResolver({
+    dummyDataSource.createResolver('CreateMeetingInvitation', {
       typeName: 'Mutation',
       fieldName: 'createMeetingInvitation',
       // only authorize a request when source == user
@@ -80,7 +80,7 @@ export class BackendApi extends Construct {
       responseMappingTemplate: appsync.MappingTemplate.fromString('$util.toJson($context.result)'),
     });
 
-    dummyDataSource.createResolver({
+    dummyDataSource.createResolver('OnMeetingInvited', {
       typeName: 'Subscription',
       fieldName: 'onMeetingInvited',
       // only authorize a request when target == user

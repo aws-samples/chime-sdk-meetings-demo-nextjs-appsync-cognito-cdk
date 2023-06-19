@@ -63,7 +63,7 @@ export class Frontend extends Construct {
       assets: [
         {
           path: 'frontend',
-          exclude: ['node_modules', 'out', '.env.local', '.next'],
+          exclude: ['node_modules', 'out', '.env.local*', '.next'],
           commands: ['npm ci'],
           // prevent too frequent frontend deployment, for temporary use
           // assetHash: 'frontend_asset',

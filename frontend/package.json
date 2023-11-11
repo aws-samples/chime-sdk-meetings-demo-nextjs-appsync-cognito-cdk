@@ -16,7 +16,7 @@
     "@mui/material": "^5.8.2",
     "amazon-chime-sdk-component-library-react": "^3.2.0",
     "amazon-chime-sdk-js": "^3.5.0",
-    "aws-amplify": "^5.0.0",
+    "aws-amplify": "^5.3.12",
     "graphql": "^16.8.1",
     "next": "13.5.4",
     "react": "^18",

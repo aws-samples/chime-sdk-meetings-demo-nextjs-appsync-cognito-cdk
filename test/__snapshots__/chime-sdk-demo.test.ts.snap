@@ -1245,7 +1245,7 @@ type Subscription {
             "sourceBucketName": Object {
               "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
             },
-            "sourceObjectKey": "80884fdab3476db6ab3bfdf470b8116cae5a9276e8af9ab457c8971a9bf56d54.zip",
+            "sourceObjectKey": "45de9dbce819ed97b54103228e122fbf7d3cbfec42e4e3a52dec8401ed3383b5.zip",
           },
         ],
         "type": "NodejsBuild",

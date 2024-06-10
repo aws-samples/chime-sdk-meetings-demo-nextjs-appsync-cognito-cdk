@@ -4,6 +4,7 @@ import { Auth } from './auth';
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export interface BackendApiProps {
   readonly auth: Auth;
@@ -18,6 +19,7 @@ export class BackendApi extends Construct {
     const chimeResolverFunction = new NodejsFunction(this, 'ChimeResolverFunction', {
       entry: 'backend/chime-resolver.ts',
       timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_20_X,
     });
 
     chimeResolverFunction.addToRolePolicy(
@@ -30,7 +32,7 @@ export class BackendApi extends Construct {
 
     const api = new appsync.GraphqlApi(this, 'Api', {
       name: 'Api',
-      schema: appsync.SchemaFile.fromAsset('backend/schema.graphql'),
+      definition: appsync.Definition.fromFile('backend/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.USER_POOL,

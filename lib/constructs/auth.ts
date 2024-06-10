@@ -1,4 +1,4 @@
-import { CfnOutput, Duration } from 'aws-cdk-lib';
+import { CfnOutput, Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
 import { Construct } from 'constructs';
 
@@ -22,6 +22,7 @@ export class Auth extends Construct {
         username: false,
         email: true,
       },
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     const client = userPool.addClient(`Client`, {

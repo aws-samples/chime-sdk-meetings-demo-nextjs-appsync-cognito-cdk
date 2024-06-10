@@ -2,109 +2,6 @@
 
 exports[`Snapshot test 1`] = `
 Object {
-  "Mappings": Object {
-    "DefaultCrNodeVersionMap": Object {
-      "af-south-1": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-east-1": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-northeast-1": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-northeast-2": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-northeast-3": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-south-1": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-south-2": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-southeast-1": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-southeast-2": Object {
-        "value": "nodejs16.x",
-      },
-      "ap-southeast-3": Object {
-        "value": "nodejs16.x",
-      },
-      "ca-central-1": Object {
-        "value": "nodejs16.x",
-      },
-      "cn-north-1": Object {
-        "value": "nodejs16.x",
-      },
-      "cn-northwest-1": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-central-1": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-central-2": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-north-1": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-south-1": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-south-2": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-west-1": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-west-2": Object {
-        "value": "nodejs16.x",
-      },
-      "eu-west-3": Object {
-        "value": "nodejs16.x",
-      },
-      "me-central-1": Object {
-        "value": "nodejs16.x",
-      },
-      "me-south-1": Object {
-        "value": "nodejs16.x",
-      },
-      "sa-east-1": Object {
-        "value": "nodejs16.x",
-      },
-      "us-east-1": Object {
-        "value": "nodejs16.x",
-      },
-      "us-east-2": Object {
-        "value": "nodejs16.x",
-      },
-      "us-gov-east-1": Object {
-        "value": "nodejs16.x",
-      },
-      "us-gov-west-1": Object {
-        "value": "nodejs16.x",
-      },
-      "us-iso-east-1": Object {
-        "value": "nodejs14.x",
-      },
-      "us-iso-west-1": Object {
-        "value": "nodejs14.x",
-      },
-      "us-isob-east-1": Object {
-        "value": "nodejs14.x",
-      },
-      "us-west-1": Object {
-        "value": "nodejs16.x",
-      },
-      "us-west-2": Object {
-        "value": "nodejs16.x",
-      },
-    },
-  },
   "Outputs": Object {
     "AuthUserPoolClientId8216BF9A": Object {
       "Value": Object {
@@ -246,6 +143,7 @@ Object {
             },
             Object {
               "Action": Array [
+                "s3:PutBucketPolicy",
                 "s3:GetBucket*",
                 "s3:List*",
                 "s3:DeleteObject*",
@@ -289,7 +187,7 @@ Object {
       "Type": "AWS::S3::BucketPolicy",
     },
     "AuthUserPool8115E87F": Object {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "AccountRecoverySetting": Object {
           "RecoveryMechanisms": Array [
@@ -331,7 +229,7 @@ Object {
         },
       },
       "Type": "AWS::Cognito::UserPool",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
     "AuthUserPoolClientC635291F": Object {
       "Properties": Object {
@@ -515,12 +413,7 @@ Object {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f72daf503e61afa751063462d6d58220378b1ac5587d7c1808f4a90b093482fa.zip",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-          },
+          "S3Key": "1f44bb10de9aaafe8d858c22a5377e98e78ff9b8cd7cc4a050110944d75f21ba.zip",
         },
         "Handler": "index.handler",
         "Role": Object {
@@ -529,15 +422,7 @@ Object {
             "Arn",
           ],
         },
-        "Runtime": Object {
-          "Fn::FindInMap": Array [
-            "DefaultCrNodeVersionMap",
-            Object {
-              "Ref": "AWS::Region",
-            },
-            "value",
-          ],
-        },
+        "Runtime": "nodejs20.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -681,6 +566,31 @@ Object {
       },
       "Type": "AWS::AppSync::Resolver",
     },
+    "BackendApiLogRetention12C9E417": Object {
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/aws/appsync/apis/",
+              Object {
+                "Fn::GetAtt": Array [
+                  "BackendApiC9FA6A88",
+                  "ApiId",
+                ],
+              },
+            ],
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
     "BackendApiOnMeetingInvited4F125712": Object {
       "DependsOn": Array [
         "BackendApiSchema3E54B1EF",
@@ -768,7 +678,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9eb41a5505d37607ac419321497a4f8c21cf0ee1f9b4a6b29aa04301aea5c7fd.zip",
+          "S3Key": "2d56e153cac88d3e0c2f842e8e6f6783b8725bf91f95e0673b4725448a56e96d.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -934,7 +844,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "350185a1069fa20a23a583e20c77f6844218bd73097902362dc94f1a108f5d89.zip",
+          "S3Key": "2eb6a831b107939f63cfebf68e6316e1a40f79fc99cae0fee9b333bac8d29bc4.zip",
         },
         "Description": Object {
           "Fn::Join": Array [
@@ -948,7 +858,7 @@ type Subscription {
             ],
           ],
         },
-        "Handler": "__entrypoint__.handler",
+        "Handler": "index.handler",
         "MemorySize": 128,
         "Role": Object {
           "Fn::GetAtt": Array [
@@ -956,7 +866,7 @@ type Subscription {
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1077,6 +987,7 @@ type Subscription {
             },
             Object {
               "Action": Array [
+                "s3:PutBucketPolicy",
                 "s3:GetBucket*",
                 "s3:List*",
                 "s3:DeleteObject*",
@@ -1246,7 +1157,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "cff916937906abb9c99e0ecbb4accbc091c734ce975c7ff64b3f4bfae4372b9c.zip",
+          "S3Key": "3322b7049fb0ed2b7cbb644a2ada8d1116ff80c32dca89e6ada846b5de26f961.zip",
         },
         "Description": "/opt/awscli/aws",
       },
@@ -1277,7 +1188,12 @@ type Subscription {
           },
         ],
         "SourceObjectKeys": Array [
-          "7979de41af3e72ff69eb4a83f38aded0.zip",
+          Object {
+            "Fn::GetAtt": Array [
+              "FrontendReactBuildE02FF220",
+              "destinationObjectKey",
+            ],
+          },
         ],
       },
       "Type": "Custom::CDKBucketDeployment",
@@ -1301,7 +1217,6 @@ type Subscription {
         "destinationBucketName": Object {
           "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
         },
-        "destinationObjectKey": "7979de41af3e72ff69eb4a83f38aded0.zip",
         "environment": Object {
           "NEXT_PUBLIC_AWS_REGION": Object {
             "Ref": "AWS::Region",
@@ -1319,6 +1234,7 @@ type Subscription {
             "Ref": "AuthUserPool8115E87F",
           },
         },
+        "outputEnvFile": false,
         "outputSourceDirectory": "frontend/out",
         "sources": Array [
           Object {
@@ -1329,9 +1245,10 @@ type Subscription {
             "sourceBucketName": Object {
               "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
             },
-            "sourceObjectKey": "7da61d26edc761751a5901fcf1fb785faf7a4bc4f9dd7ba25dc03c268df18c80.zip",
+            "sourceObjectKey": "7cc5abe15b68d8fa65ed25bf0c0552073e6cc039805b630891b7141476fdfe3e.zip",
           },
         ],
+        "type": "NodejsBuild",
         "workingDirectory": "frontend",
       },
       "Type": "Custom::CDKNodejsBuild",
@@ -1362,6 +1279,9 @@ type Subscription {
         "Source": Object {
           "BuildSpec": "{
   \\"version\\": \\"0.2\\",
+  \\"env\\": {
+    \\"shell\\": \\"bash\\"
+  },
   \\"phases\\": {
     \\"install\\": {
       \\"runtime-versions\\": {
@@ -1379,13 +1299,14 @@ type Subscription {
         \\"cd \\\\\\"$current_dir\\\\\\"\\",
         \\"cd \\\\\\"$outputSourceDirectory\\\\\\"\\",
         \\"zip -r output.zip ./\\",
-        \\"aws s3 cp output.zip \\\\\\"s3://$destinationBucketName/$destinationObjectKey\\\\\\"\\"
+        \\"aws s3 cp output.zip \\\\\\"s3://$destinationBucketName/$destinationObjectKey\\\\\\"\\",
+        \\"\\\\nif [[ $outputEnvFile == \\\\\\"true\\\\\\" ]]\\\\nthen\\\\n  # Split the comma-separated string into an array\\\\n  for var_name in \${envNames//,/ }\\\\n  do\\\\n      echo \\\\\\"Element: $var_name\\\\\\"\\\\n      var_value=\\\\\\"\${!var_name}\\\\\\"\\\\n      echo \\\\\\"$var_name=$var_value\\\\\\" >> tmp.env\\\\n  done\\\\n\\\\n  aws s3 cp tmp.env \\\\\\"s3://$destinationBucketName/$envFileKey\\\\\\"\\\\nfi\\\\n              \\"
       ]
     },
     \\"post_build\\": {
       \\"commands\\": [
         \\"echo Build completed on \`date\`\\",
-        \\"\\\\nSTATUS='SUCCESS'\\\\nif [ $CODEBUILD_BUILD_SUCCEEDING -ne 1 ] # Test if the build is failing\\\\nthen\\\\nSTATUS='FAILED'\\\\nREASON=\\\\\\"NodejsBuild failed. See CloudWatch Log stream for the detailed reason: \\\\nhttps://$AWS_REGION.console.aws.amazon.com/cloudwatch/home?region=$AWS_REGION#logsV2:log-groups/log-group/\\\\\\\\$252Faws\\\\\\\\$252Fcodebuild\\\\\\\\$252F$projectName/log-events/$CODEBUILD_LOG_PATH\\\\\\"\\\\nfi\\\\ncat <<EOF > payload.json\\\\n{\\\\n  \\\\\\"StackId\\\\\\": \\\\\\"$stackId\\\\\\",\\\\n  \\\\\\"RequestId\\\\\\": \\\\\\"$requestId\\\\\\",\\\\n  \\\\\\"LogicalResourceId\\\\\\":\\\\\\"$logicalResourceId\\\\\\",\\\\n  \\\\\\"PhysicalResourceId\\\\\\": \\\\\\"$destinationObjectKey\\\\\\",\\\\n  \\\\\\"Status\\\\\\": \\\\\\"$STATUS\\\\\\",\\\\n  \\\\\\"Reason\\\\\\": \\\\\\"$REASON\\\\\\"\\\\n}\\\\nEOF\\\\ncurl -vv -i -X PUT -H 'Content-Type:' -d \\\\\\"@payload.json\\\\\\" \\\\\\"$responseURL\\\\\\"\\\\n              \\"
+        \\"\\\\nSTATUS='SUCCESS'\\\\nif [ $CODEBUILD_BUILD_SUCCEEDING -ne 1 ] # Test if the build is failing\\\\nthen\\\\nSTATUS='FAILED'\\\\nREASON=\\\\\\"NodejsBuild failed. See CloudWatch Log stream for the detailed reason: \\\\nhttps://$AWS_REGION.console.aws.amazon.com/cloudwatch/home?region=$AWS_REGION#logsV2:log-groups/log-group/\\\\\\\\$252Faws\\\\\\\\$252Fcodebuild\\\\\\\\$252F$projectName/log-events/$CODEBUILD_LOG_PATH\\\\\\"\\\\nfi\\\\ncat <<EOF > payload.json\\\\n{\\\\n  \\\\\\"StackId\\\\\\": \\\\\\"$stackId\\\\\\",\\\\n  \\\\\\"RequestId\\\\\\": \\\\\\"$requestId\\\\\\",\\\\n  \\\\\\"LogicalResourceId\\\\\\":\\\\\\"$logicalResourceId\\\\\\",\\\\n  \\\\\\"PhysicalResourceId\\\\\\": \\\\\\"$logicalResourceId\\\\\\",\\\\n  \\\\\\"Status\\\\\\": \\\\\\"$STATUS\\\\\\",\\\\n  \\\\\\"Reason\\\\\\": \\\\\\"$REASON\\\\\\",\\\\n  \\\\\\"Data\\\\\\": {\\\\n    \\\\\\"destinationObjectKey\\\\\\": \\\\\\"$destinationObjectKey\\\\\\",\\\\n    \\\\\\"envFileKey\\\\\\": \\\\\\"$envFileKey\\\\\\"\\\\n  }\\\\n}\\\\nEOF\\\\ncurl -v -i -X PUT -H 'Content-Type:' -d \\\\\\"@payload.json\\\\\\" \\\\\\"$responseURL\\\\\\"\\\\n              \\"
       ]
     }
   }
@@ -1605,6 +1526,85 @@ type Subscription {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": Object {
+      "DependsOn": Array [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "4e26bf2d0a26f2097fb2b261f22bb51e3f6b4b52635777b1e54edbd8e2d58c35.zip",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": Array [
+          Object {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c446591C4101F8": Object {
       "DependsOn": Array [
         "NodejsBuildCustomResourceHandler25648b212c404f09aa65b6bbb0c44659ServiceRoleDefaultPolicyCF8879D3",
@@ -1615,7 +1615,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a89beece57b97d45d5016b9e88de3696daaf6ae49a79344dcb1386fe581a125b.zip",
+          "S3Key": "aa47254059d94cff79a1f8a5a97c4e8a0e14a3f105d2b089464c0beeeb6cfe8d.zip",
         },
         "Handler": "index.handler",
         "Role": Object {

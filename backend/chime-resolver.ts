@@ -1,6 +1,6 @@
-import { Chime, Endpoint } from 'aws-sdk'
 import { v4 } from 'uuid'
 import { AppSyncResolverHandler } from 'aws-lambda'
+import { Chime } from '@aws-sdk/client-chime'
 
 type EmptyArgument = {}
 
@@ -23,13 +23,9 @@ type Argument = EmptyArgument | JoinMeetingArgument
 
 // You must use "us-east-1" as the region for Chime API and set the endpoint.
 // https://docs.aws.amazon.com/chime-sdk/latest/dg/configure-sdk-invoke.html
-const chime = new Chime({ region: 'us-east-1' })
-chime.endpoint = new Endpoint('https://service.chime.aws.amazon.com')
+const chime = new Chime({ region: 'us-east-1', endpoint: 'https://service.chime.aws.amazon.com' })
 
-export const handler: AppSyncResolverHandler<Argument, Result> = async (
-  event,
-  context
-) => {
+export const handler: AppSyncResolverHandler<Argument, Result> = async (event, context) => {
   console.log(event)
   switch (event.info.fieldName) {
     case 'createChimeMeeting':
@@ -42,12 +38,10 @@ export const handler: AppSyncResolverHandler<Argument, Result> = async (
 }
 
 const createChimeMeeting = async (): Promise<CreateChimeMeetingResult> => {
-  const meetingResponse = await chime
-    .createMeeting({
-      ClientRequestToken: v4(),
-      MediaRegion: 'ap-northeast-1', // Specify the region in which to create the meeting.
-    })
-    .promise()
+  const meetingResponse = await chime.createMeeting({
+    ClientRequestToken: v4(),
+    MediaRegion: 'ap-northeast-1', // Specify the region in which to create the meeting.
+  })
 
   if (meetingResponse?.Meeting?.MeetingId == null) {
     throw Error('empty MeetingId!')
@@ -56,16 +50,12 @@ const createChimeMeeting = async (): Promise<CreateChimeMeetingResult> => {
   return await joinMeeting({ meetingResponse: JSON.stringify(meetingResponse) })
 }
 
-const joinMeeting = async (
-  request: JoinMeetingArgument
-): Promise<JoinMeetingResult> => {
+const joinMeeting = async (request: JoinMeetingArgument): Promise<JoinMeetingResult> => {
   const meeting = JSON.parse(request.meetingResponse)
-  const attendeeResponse = await chime
-    .createAttendee({
-      MeetingId: meeting.Meeting.MeetingId,
-      ExternalUserId: v4(),
-    })
-    .promise()
+  const attendeeResponse = await chime.createAttendee({
+    MeetingId: meeting.Meeting.MeetingId,
+    ExternalUserId: v4(),
+  })
 
   return {
     attendeeResponse: JSON.stringify(attendeeResponse),

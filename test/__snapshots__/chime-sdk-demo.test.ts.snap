@@ -2,6 +2,130 @@
 
 exports[`Snapshot test 1`] = `
 Object {
+  "Mappings": Object {
+    "LatestNodeRuntimeMap": Object {
+      "af-south-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-east-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-northeast-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-northeast-2": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-northeast-3": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-south-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-south-2": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-2": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-3": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-4": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-5": Object {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-7": Object {
+        "value": "nodejs20.x",
+      },
+      "ca-central-1": Object {
+        "value": "nodejs20.x",
+      },
+      "ca-west-1": Object {
+        "value": "nodejs20.x",
+      },
+      "cn-north-1": Object {
+        "value": "nodejs18.x",
+      },
+      "cn-northwest-1": Object {
+        "value": "nodejs18.x",
+      },
+      "eu-central-1": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-central-2": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-isoe-west-1": Object {
+        "value": "nodejs18.x",
+      },
+      "eu-north-1": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-south-1": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-south-2": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-west-1": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-west-2": Object {
+        "value": "nodejs20.x",
+      },
+      "eu-west-3": Object {
+        "value": "nodejs20.x",
+      },
+      "il-central-1": Object {
+        "value": "nodejs20.x",
+      },
+      "me-central-1": Object {
+        "value": "nodejs20.x",
+      },
+      "me-south-1": Object {
+        "value": "nodejs20.x",
+      },
+      "mx-central-1": Object {
+        "value": "nodejs20.x",
+      },
+      "sa-east-1": Object {
+        "value": "nodejs20.x",
+      },
+      "us-east-1": Object {
+        "value": "nodejs20.x",
+      },
+      "us-east-2": Object {
+        "value": "nodejs20.x",
+      },
+      "us-gov-east-1": Object {
+        "value": "nodejs18.x",
+      },
+      "us-gov-west-1": Object {
+        "value": "nodejs18.x",
+      },
+      "us-iso-east-1": Object {
+        "value": "nodejs18.x",
+      },
+      "us-iso-west-1": Object {
+        "value": "nodejs18.x",
+      },
+      "us-isob-east-1": Object {
+        "value": "nodejs18.x",
+      },
+      "us-west-1": Object {
+        "value": "nodejs20.x",
+      },
+      "us-west-2": Object {
+        "value": "nodejs20.x",
+      },
+    },
+  },
   "Outputs": Object {
     "AuthUserPoolClientId8216BF9A": Object {
       "Value": Object {
@@ -678,7 +802,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "2d56e153cac88d3e0c2f842e8e6f6783b8725bf91f95e0673b4725448a56e96d.zip",
+          "S3Key": "0158f40002a8c211635388a87874fd4dcc3d68f525fe08a0fe0f014069ae539c.zip",
         },
         "Environment": Object {
           "Variables": Object {
@@ -844,7 +968,7 @@ type Subscription {
           "S3Bucket": Object {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "2eb6a831b107939f63cfebf68e6316e1a40f79fc99cae0fee9b333bac8d29bc4.zip",
+          "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip",
         },
         "Description": Object {
           "Fn::Join": Array [
@@ -866,7 +990,15 @@ type Subscription {
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": Object {
+          "Fn::FindInMap": Array [
+            "LatestNodeRuntimeMap",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            "value",
+          ],
+        },
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -1545,7 +1677,15 @@ type Subscription {
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": Object {
+          "Fn::FindInMap": Array [
+            "LatestNodeRuntimeMap",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            "value",
+          ],
+        },
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
